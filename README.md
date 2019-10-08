@@ -7,10 +7,17 @@ npm install -g chande
 ```
 
 # Usage 
+For getting all the available currencies:
 ```shell
 chande
 ```
-Sample out put:
+
+For getting an specific currency:
+```
+chande usd
+```
+
+Sample output:
 ```
 .--------------------------------------------.
 |   | Currency | Lowest  | Highest |  Live   |
