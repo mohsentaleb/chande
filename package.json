@@ -1,0 +1,19 @@
+{
+  "name": "chande",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "chande": "./app.js"
+  },
+  "author": "Mohsen Taleb <mohsentaleb@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ascii-table": "0.0.9",
+    "chalk": "^2.4.2",
+    "got": "^9.6.0"
+  }
+}
