@@ -14,7 +14,11 @@ chande
 
 For getting an specific currency:
 ```
-chande usd eur
+chande usd
+```
+Or multiple currencies at once:
+```
+chande usd eur try
 ```
 
 Sample output:
@@ -22,10 +26,11 @@ Sample output:
 .--------------------------------------------.
 |   | Currency | Lowest  | Highest |  Live   |
 |---|----------|---------|---------|---------|
-| 1 | USD      | 113,890 | 114,000 | 113,930 |
+| 1 | USD      | 113,890 | 114,090 | 113,950 |
 | 2 | EUR      | 125,890 | 126,000 | 126,000 |
-| 3 | TRY      | 19,930  | 20,210  | 19,940  |
-| 4 | AED      | 31,550  | 31,650  | 31,610  |
+| 3 | TRY      | 19,840  | 20,000  | 19,900  |
+| 4 | AED      | 31,630  | 31,730  | 31,730  |
+| 5 | GBP      | 141,340 | 142,190 | 141,790 |
 '--------------------------------------------'
 * Prices are in IRR.
 ** Source: www.tgju.org
