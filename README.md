@@ -14,7 +14,7 @@ chande
 
 For getting an specific currency:
 ```
-chande usd
+chande usd eur
 ```
 
 Sample output:

@@ -4,7 +4,7 @@ const got = require('got');
 const AsciiTable = require('ascii-table');
 
 (async () => {
-    const userCurrency = process.argv[2] ? process.argv[2].toLocaleLowerCase() : null;
+    const userCurrency = process.argv.slice(2);
     const pricesJSON = await got('http://call4.tgju.org/ajax.json', {
         json: true
     });
@@ -20,15 +20,13 @@ const AsciiTable = require('ascii-table');
         gbp: [prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p],
     };
 
-    if (userCurrency) {
-        const supportedCurrencies = Object.keys(currencyValues);
+    let supportedCurrencies = Object.keys(currencyValues);
 
-        if (supportedCurrencies.includes(userCurrency)) {
-            currencyValues = {
-                [userCurrency]: currencyValues[userCurrency]
-            };
-        }
+    if (userCurrency.length > 0) {
+        supportedCurrencies = userCurrency.filter(i => supportedCurrencies.includes(i.toLocaleLowerCase()));
     }
+
+    supportedCurrencies = [...new Set(supportedCurrencies)];
 
     let tableJSON = {
         title: '',
@@ -36,7 +34,7 @@ const AsciiTable = require('ascii-table');
         rows: []
     };
 
-    Object.keys(currencyValues).map((currency, index) => {
+    supportedCurrencies.map((currency, index) => {
         let currencyId = currency.toUpperCase();
         tableJSON.rows.push([++index, currencyId, ...currencyValues[currency]]);
     });
