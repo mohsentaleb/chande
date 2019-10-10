@@ -13,12 +13,12 @@ const AsciiTable = require('ascii-table');
     } = pricesJSON.body;
 
     let currencyValues = {
-        // [change, fluctuation, %change, lowest, highest, live]
-        usd: [prices.price_dollar_rl.d, prices.price_dollar_rl.dt, prices.price_dollar_rl.dp, prices.price_dollar_rl.l, prices.price_dollar_rl.h, prices.price_dollar_rl.p],
-        eur: [prices.price_eur.d, prices.price_eur.dt, prices.price_eur.dp, prices.price_eur.l, prices.price_eur.h, prices.price_eur.p],
-        try: [prices.price_try.d, prices.price_try.dt, prices.price_try.dp, prices.price_try.l, prices.price_try.h, prices.price_try.p],
-        aed: [prices.price_aed.d, prices.price_aed.dt, prices.price_aed.dp, prices.price_aed.l, prices.price_aed.h, prices.price_aed.p],
-        gbp: [prices.price_gbp.d, prices.price_gbp.dt, prices.price_gbp.dp, prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p],
+        // [lastUpdate, change, fluctuation, %change, lowest, highest, live]
+        usd: [prices.price_dollar_rl.ts, prices.price_dollar_rl.d, prices.price_dollar_rl.dt, prices.price_dollar_rl.dp, prices.price_dollar_rl.l, prices.price_dollar_rl.h, prices.price_dollar_rl.p],
+        eur: [prices.price_eur.ts, prices.price_eur.d, prices.price_eur.dt, prices.price_eur.dp, prices.price_eur.l, prices.price_eur.h, prices.price_eur.p],
+        try: [prices.price_try.ts, prices.price_try.d, prices.price_try.dt, prices.price_try.dp, prices.price_try.l, prices.price_try.h, prices.price_try.p],
+        aed: [prices.price_aed.ts, prices.price_aed.d, prices.price_aed.dt, prices.price_aed.dp, prices.price_aed.l, prices.price_aed.h, prices.price_aed.p],
+        gbp: [prices.price_gbp.ts, prices.price_gbp.d, prices.price_gbp.dt, prices.price_gbp.dp, prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p],
     };
 
     let supportedCurrencies = Object.keys(currencyValues);
@@ -31,24 +31,24 @@ const AsciiTable = require('ascii-table');
 
     let tableJSON = {
         title: '',
-        heading: ['', 'Currency', 'Fluctuation', 'Lowest', 'Highest', 'Live'],
+        heading: ['', 'Currency', 'Last Update', 'Fluctuation', 'Lowest', 'Highest', 'Live'],
         rows: []
     };
 
     supportedCurrencies.map((currency, index) => {
         let currencyId = currency.toUpperCase();
         var fluctuation, livePrice, difference;
-        switch (currencyValues[currency][1]) {
+        switch (currencyValues[currency][2]) {
             case 'low':
-                fluctuation = '▼ ' + currencyValues[currency][0] + ' (%' + currencyValues[currency][2] + ')';
+                fluctuation = '▼ ' + currencyValues[currency][1] + ' (%' + currencyValues[currency][3] + ')';
                 break;
             case 'high':
-                fluctuation = '▲ ' + currencyValues[currency][0] + ' (%' + currencyValues[currency][2] + ')';
+                fluctuation = '▲ ' + currencyValues[currency][1] + ' (%' + currencyValues[currency][3] + ')';
                 break;
             default:
                 fluctuation = '-'
         }
-        tableJSON.rows.push([++index, currencyId, fluctuation, ...currencyValues[currency].splice(3)]);
+        tableJSON.rows.push([++index, currencyId, currencyValues[currency][0], fluctuation, ...currencyValues[currency].splice(4)]);
     });
 
     const table = new AsciiTable().fromJSON(tableJSON);
