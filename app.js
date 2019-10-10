@@ -19,6 +19,7 @@ const AsciiTable = require('ascii-table');
         try: [prices.price_try.ts, prices.price_try.d, prices.price_try.dt, prices.price_try.dp, prices.price_try.l, prices.price_try.h, prices.price_try.p],
         aed: [prices.price_aed.ts, prices.price_aed.d, prices.price_aed.dt, prices.price_aed.dp, prices.price_aed.l, prices.price_aed.h, prices.price_aed.p],
         gbp: [prices.price_gbp.ts, prices.price_gbp.d, prices.price_gbp.dt, prices.price_gbp.dp, prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p],
+        sek: [prices.price_sek.ts, prices.price_sek.d, prices.price_sek.dt, prices.price_sek.dp, prices.price_sek.l, prices.price_sek.h, prices.price_sek.p]
     };
 
     let supportedCurrencies = Object.keys(currencyValues);
