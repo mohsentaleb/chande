@@ -8,9 +8,7 @@ const AsciiTable = require('ascii-table');
     const pricesJSON = await got('http://call4.tgju.org/ajax.json', {
         json: true
     });
-    const {
-        current: prices
-    } = pricesJSON.body;
+    const { current: prices } = pricesJSON.body;
 
     let currencyValues = {
         // [lastUpdate, change, fluctuation, %change, lowest, highest, live]
