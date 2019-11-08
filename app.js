@@ -5,7 +5,7 @@ const AsciiTable = require('ascii-table');
 
 (async () => {
     const userCurrency = process.argv.slice(2);
-    const pricesJSON = await got('http://call4.tgju.org/ajax.json', {
+    const pricesJSON = await got('http://call2.tgju.org/ajax.json', {
         json: true
     });
     const { current: prices } = pricesJSON.body;
@@ -16,8 +16,7 @@ const AsciiTable = require('ascii-table');
         eur: [prices.price_eur.ts, prices.price_eur.d, prices.price_eur.dt, prices.price_eur.dp, prices.price_eur.l, prices.price_eur.h, prices.price_eur.p],
         try: [prices.price_try.ts, prices.price_try.d, prices.price_try.dt, prices.price_try.dp, prices.price_try.l, prices.price_try.h, prices.price_try.p],
         aed: [prices.price_aed.ts, prices.price_aed.d, prices.price_aed.dt, prices.price_aed.dp, prices.price_aed.l, prices.price_aed.h, prices.price_aed.p],
-        gbp: [prices.price_gbp.ts, prices.price_gbp.d, prices.price_gbp.dt, prices.price_gbp.dp, prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p],
-        sek: [prices.price_sek.ts, prices.price_sek.d, prices.price_sek.dt, prices.price_sek.dp, prices.price_sek.l, prices.price_sek.h, prices.price_sek.p]
+        gbp: [prices.price_gbp.ts, prices.price_gbp.d, prices.price_gbp.dt, prices.price_gbp.dp, prices.price_gbp.l, prices.price_gbp.h, prices.price_gbp.p]
     };
 
     let supportedCurrencies = Object.keys(currencyValues);
