@@ -1,27 +1,35 @@
 # Chande
+
 A minimal command line tool to get the rate of popular currencies in Iran from [tgju.org](http://www.tgju.org/).
 
 # Installation
+
 ```shell
 npm install -g chande
 ```
 
-# Usage 
+# Usage
+
 For getting all the available currencies:
+
 ```shell
 chande
 ```
 
 For getting an specific currency:
+
 ```
 chande usd
 ```
+
 Or multiple currencies at once:
+
 ```
 chande usd eur try
 ```
 
 Sample output:
+
 ```
 .----------------------------------------------------------------------------------.
 |   | Currency |  Live   |  Fluctuation  |     Last Update     | Lowest  | Highest |
@@ -36,5 +44,12 @@ Sample output:
 ** Source: www.tgju.org
 ```
 
+# Testing
+
+```
+npm test
+```
+
 # License
+
 MIT
