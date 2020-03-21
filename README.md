@@ -1,15 +1,12 @@
 # Chande
-
-A minimal command line tool to get the rate of popular currencies in Iran from [tgju.org](http://www.tgju.org/).
+A minimal command-line tool for getting the rate of popular currencies in Iran's **free market** from [bonbast.com](https://bonbast.com).
 
 # Installation
-
 ```shell
 npm install -g chande
 ```
 
 # Usage
-
 For getting all the available currencies:
 
 ```shell
@@ -31,25 +28,30 @@ chande usd eur try
 Sample output:
 
 ```
-.----------------------------------------------------------------------------------.
-|   | Currency |  Live   |  Fluctuation  |     Last Update     | Lowest  | Highest |
-|---|----------|---------|---------------|---------------------|---------|---------|
-| 1 | USD      | 113,540 | ▲ 160 (%0.14) | 2019-11-09 11:41:31 | 113,380 | 113,550 |
-| 2 | EUR      | 126,420 | ▼ 60 (%0.05)  | 2019-11-09 11:41:31 | 126,390 | 126,540 |
-| 3 | TRY      | 19,890  | ▼ 90 (%0.45)  | 2019-11-09 11:41:31 | 19,880  | 19,920  |
-| 4 | AED      | 31,460  | ▼ 30 (%0.1)   | 2019-11-09 11:41:31 | 31,440  | 31,510  |
-| 5 | GBP      | 146,630 | ▼ 680 (%0.46) | 2019-11-09 11:41:31 | 146,520 | 146,840 |
-'----------------------------------------------------------------------------------'
-* Prices are in IRR.
-** Source: www.tgju.org
+.--------------------------------------------.
+|   | Code |   Currency    |  Sell  |  Buy   |
+|---|------|---------------|--------|--------|
+| 1 | USD  | US Dollar     | 16,100 | 16,000 |
+| 2 | EUR  | Euro          | 17,330 | 17,180 |
+| 3 | TRY  | Turkish Lira  | 2,455  | 2,435  |
+| 4 | AED  | UAE Dirham    | 4,385  | 4,365  |
+| 5 | GBP  | British Pound | 18,755 | 18,555 |
+'--------------------------------------------'
+- Last update: Sat, 21 Mar 2020 09:26:02
+- Prices are in Iranian Toman (1 Toman = 10 Rials)
+- Source: bonbast.com
 ```
 
-# Testing
+# Proxy support
+Since bonbast.com is banned in Iran, you may use a proxy:
 
+```shell
+chande --proxy socks5://127.0.0.1:1080
 ```
-npm test
+With currency args:
+```shell
+chande usd try --proxy socks5://127.0.0.1:1080
 ```
 
 # License
-
 MIT

@@ -1,142 +1,104 @@
 #!/usr/bin/env node
 
-const got = require("got");
+const puppeteer = require("puppeteer");
 const AsciiTable = require("ascii-table");
-const { URL_ENDPOINT } = require("./constants");
+const argv = require("minimist")(process.argv.slice(2));
+
+const URL = "https://bonbast.com";
+
+const getValueBySelector = (page, selector) => {
+  return page.$eval(selector, el => el.innerText);
+};
+
+const numberWithCommas = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 (async () => {
-  const userCurrency = process.argv.slice(2);
-  let pricesJSON;
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: argv.proxy
+      ? ["--proxy-server=" + argv.proxy]
+      : ["--proxy-auto-detect"]
+  });
+  const page = await browser.newPage();
 
   try {
-    pricesJSON = await got(URL_ENDPOINT, { json: true });
-  } catch (err) {
-    // Handling all connection errors here.
-    // - Not connected to the Internet
-    // - tgju.org is not responding or URL has changed
-    if (err.code === "ECONNREFUSED") {
-      console.log(
-        "\nSeems like you are not connected to the Internet. Please check your connection and try again."
+    await page.goto(URL);
+    let currencyValues = {
+      usd: {
+        label: "US Dollar",
+        sell: await getValueBySelector(page, "#usd1"),
+        buy: await getValueBySelector(page, "#usd2")
+      },
+      eur: {
+        label: "Euro",
+        sell: await getValueBySelector(page, "#eur1"),
+        buy: await getValueBySelector(page, "#eur2")
+      },
+      try: {
+        label: "Turkish Lira",
+        sell: await getValueBySelector(page, "#try1"),
+        buy: await getValueBySelector(page, "#try2")
+      },
+      aed: {
+        label: "UAE Dirham",
+        sell: await getValueBySelector(page, "#aed1"),
+        buy: await getValueBySelector(page, "#aed2")
+      },
+      gbp: {
+        label: "British Pound",
+        sell: await getValueBySelector(page, "#gbp1"),
+        buy: await getValueBySelector(page, "#gbp2")
+      }
+    };
+
+    const userCurrencyArgs = argv._;
+    let supportedCurrencies = Object.keys(currencyValues);
+
+    if (userCurrencyArgs.length > 0) {
+      // user needs only specifc currencies
+      supportedCurrencies = userCurrencyArgs.filter(i =>
+        supportedCurrencies.includes(i.toLocaleLowerCase())
       );
-      return;
     }
 
-    if (err.statusCode === 522) {
-      console.log(
-        "\nAn error occured while fetching data from tgju.org. Please try updating your app: npm update chande -g \nIf the problem presists, please open an issue: https://github.com/mohsentaleb/chande/issues"
-      );
-      return;
-    }
-  }
-  const { current: prices } = pricesJSON.body;
+    supportedCurrencies = [...new Set(supportedCurrencies)];
 
-  let currencyValues = {
-    // [live, change, fluctuation, %change, lastUpdate, lowest, highest]
-    usd: [
-      prices.price_dollar_rl.p,
-      prices.price_dollar_rl.d,
-      prices.price_dollar_rl.dt,
-      prices.price_dollar_rl.dp,
-      prices.price_dollar_rl.ts,
-      prices.price_dollar_rl.l,
-      prices.price_dollar_rl.h
-    ],
-    eur: [
-      prices.price_eur.p,
-      prices.price_eur.d,
-      prices.price_eur.dt,
-      prices.price_eur.dp,
-      prices.price_eur.ts,
-      prices.price_eur.l,
-      prices.price_eur.h
-    ],
-    try: [
-      prices.price_try.p,
-      prices.price_try.d,
-      prices.price_try.dt,
-      prices.price_try.dp,
-      prices.price_try.ts,
-      prices.price_try.l,
-      prices.price_try.h
-    ],
-    aed: [
-      prices.price_aed.p,
-      prices.price_aed.d,
-      prices.price_aed.dt,
-      prices.price_aed.dp,
-      prices.price_aed.ts,
-      prices.price_aed.l,
-      prices.price_aed.h
-    ],
-    gbp: [
-      prices.price_gbp.p,
-      prices.price_gbp.d,
-      prices.price_gbp.dt,
-      prices.price_gbp.dp,
-      prices.price_gbp.ts,
-      prices.price_gbp.l,
-      prices.price_gbp.h
-    ]
-  };
+    const lastUpdate = await page.$eval("#last_modified", el => el.innerText);
 
-  let supportedCurrencies = Object.keys(currencyValues);
+    let tableJSON = {
+      title: "",
+      heading: ["", "Code", "Currency", "Sell", "Buy"],
+      rows: []
+    };
 
-  if (userCurrency.length > 0) {
-    supportedCurrencies = userCurrency.filter(i =>
-      supportedCurrencies.includes(i.toLocaleLowerCase())
+    supportedCurrencies.map((currency, index) => {
+      let currencyCode = currency.toUpperCase();
+
+      tableJSON.rows.push([
+        ++index,
+        currencyCode,
+        currencyValues[currency]["label"],
+        numberWithCommas(currencyValues[currency]["sell"]),
+        numberWithCommas(currencyValues[currency]["buy"])
+      ]);
+    });
+
+    const table = new AsciiTable().fromJSON(tableJSON);
+    console.log(table.render());
+    console.log(`- Last update: ${lastUpdate}`);
+    console.log("- Prices are in Iranian Toman (1 Toman = 10 Rials)");
+    console.log("- Source: bonbast.com");
+
+    await browser.close();
+  } catch (e) {
+    console.log(
+      "Can not connect to bonbast.com. If you are in Iran, you may use a proxy. Example:\nchande --proxy socks5://127.0.0.1:1080 "
     );
+
+    await browser.close();
+  } finally {
+    process.exit(1);
   }
-
-  supportedCurrencies = [...new Set(supportedCurrencies)];
-
-  let tableJSON = {
-    title: "",
-    heading: [
-      "",
-      "Currency",
-      "Live",
-      "Fluctuation",
-      "Last Update",
-      "Lowest",
-      "Highest"
-    ],
-    rows: []
-  };
-
-  supportedCurrencies.map((currency, index) => {
-    let currencyId = currency.toUpperCase();
-    var fluctuation, livePrice, difference;
-    switch (currencyValues[currency][2]) {
-      case "low":
-        fluctuation =
-          "▼ " +
-          currencyValues[currency][1] +
-          " (%" +
-          currencyValues[currency][3] +
-          ")";
-        break;
-      case "high":
-        fluctuation =
-          "▲ " +
-          currencyValues[currency][1] +
-          " (%" +
-          currencyValues[currency][3] +
-          ")";
-        break;
-      default:
-        fluctuation = "-";
-    }
-    tableJSON.rows.push([
-      ++index,
-      currencyId,
-      currencyValues[currency][0],
-      fluctuation,
-      ...currencyValues[currency].splice(4)
-    ]);
-  });
-
-  const table = new AsciiTable().fromJSON(tableJSON);
-  console.log(table.render());
-  console.log("* Prices are in IRR.");
-  console.log("** Source: www.tgju.org");
 })();
