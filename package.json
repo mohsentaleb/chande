@@ -1,9 +1,16 @@
 {
   "name": "chande",
-  "version": "2.0.0",
-  "description": "",
-  "main": "app.js",
+  "version": "2.1.0",
+  "publishConfig": {
+    "access": "public",
+    "branches": [
+      "master"
+    ]
+  },
+  "description": "A minimal command-line tool for getting the rate of popular currencies in Iran's free market from bonbast.com.",
+  "main": "dist/app.ts",
   "scripts": {
+    "start": "tsc && node dist/app.js",
     "test": "jest"
   },
   "repository": {
@@ -14,7 +21,7 @@
     "url": "https://github.com/mohsentaleb/chande/issues"
   },
   "bin": {
-    "chande": "./app.js"
+    "chande": "./dist/app.js"
   },
   "jest": {
     "coverageDirectory": "coverage",
@@ -32,11 +39,16 @@
   "author": "Mohsen Taleb",
   "license": "MIT",
   "dependencies": {
+    "@types/puppeteer": "^2.0.1",
     "ascii-table": "0.0.9",
     "minimist": "^1.2.5",
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {
-    "jest": "^24.9.0"
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^12.7.4",
+    "jest": "^24.9.0",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
   }
 }
