@@ -15,7 +15,8 @@ test-and-release:
         with:
         node-version: 12
     - name: Install dependencies
-        run: npm install
+        run: npm ci
+        run: npm run build
     - name: Release
         uses: JS-DevTools/npm-publish@v1
         with:

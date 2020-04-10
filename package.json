@@ -10,6 +10,7 @@
   "description": "A minimal command-line tool for getting the rate of popular currencies in Iran's free market from bonbast.com.",
   "main": "dist/app.ts",
   "scripts": {
+    "build": "tsc",
     "start": "tsc && node dist/app.js",
     "test": "jest"
   },
