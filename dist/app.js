@@ -20,9 +20,6 @@ const getValueBySelector = async (page, selector) => {
         return page.evaluate((el) => el.innerText, el);
     }
 };
-const thousandsSeparator = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
 (async () => {
     const browser = await puppeteer_1.default.launch({
         headless: true,
@@ -36,28 +33,28 @@ const thousandsSeparator = (x) => {
         let currencyValues = {
             usd: {
                 label: "US Dollar",
-                sell: await getValueBySelector(page, "#usd1"),
+                sell: parseInt(await getValueBySelector(page, "#usd1")),
                 buy: await getValueBySelector(page, "#usd2"),
             },
             eur: {
                 label: "Euro",
-                sell: await getValueBySelector(page, "#eur1"),
-                buy: await getValueBySelector(page, "#eur2"),
+                sell: parseInt(await getValueBySelector(page, "#eur1")),
+                buy: parseInt(await getValueBySelector(page, "#eur2")),
             },
             try: {
                 label: "Turkish Lira",
-                sell: await getValueBySelector(page, "#try1"),
-                buy: await getValueBySelector(page, "#try2"),
+                sell: parseInt(await getValueBySelector(page, "#try1")),
+                buy: parseInt(await getValueBySelector(page, "#try2")),
             },
             aed: {
                 label: "UAE Dirham",
-                sell: await getValueBySelector(page, "#aed1"),
-                buy: await getValueBySelector(page, "#aed2"),
+                sell: parseInt(await getValueBySelector(page, "#aed1")),
+                buy: parseInt(await getValueBySelector(page, "#aed2")),
             },
             gbp: {
                 label: "British Pound",
-                sell: await getValueBySelector(page, "#gbp1"),
-                buy: await getValueBySelector(page, "#gbp2"),
+                sell: parseInt(await getValueBySelector(page, "#gbp1")),
+                buy: parseInt(await getValueBySelector(page, "#gbp2")),
             },
         };
         const userCurrencyArgs = commander_1.program.args;
@@ -79,8 +76,8 @@ const thousandsSeparator = (x) => {
                 ++index,
                 currencyCode,
                 currencyValues[currency]["label"],
-                thousandsSeparator(currencyValues[currency]["sell"]),
-                thousandsSeparator(currencyValues[currency]["buy"]),
+                new Intl.NumberFormat("en-US").format(currencyValues[currency]["sell"]),
+                new Intl.NumberFormat("en-US").format(currencyValues[currency]["buy"]),
             ];
             tableJSON.rows.push(row);
         });
