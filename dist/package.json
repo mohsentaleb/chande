@@ -1,0 +1,49 @@
+{
+    "name": "chande",
+    "version": "2.1.0",
+    "publishConfig": {
+        "access": "public",
+        "branches": [
+            "master"
+        ]
+    },
+    "description": "A minimal command-line tool for getting the rate of popular currencies in Iran's free market from bonbast.com.",
+    "main": "dist/app.ts",
+    "scripts": {
+        "build": "tsc",
+        "start": "tsc && node dist/app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mohsentaleb/chande.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mohsentaleb/chande/issues"
+    },
+    "bin": {
+        "chande": "./dist/app.js"
+    },
+    "keywords": [
+        "currency",
+        "exchange",
+        "rate",
+        "money",
+        "rial",
+        "toman",
+        "dollar"
+    ],
+    "author": "Mohsen Taleb",
+    "license": "MIT",
+    "dependencies": {
+        "@types/commander": "^2.12.2",
+        "@types/puppeteer": "^2.0.1",
+        "ascii-table": "0.0.9",
+        "commander": "^5.0.0",
+        "puppeteer": "^2.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^12.7.4",
+        "tslint": "^6.1.1",
+        "typescript": "^3.8.3"
+    }
+}

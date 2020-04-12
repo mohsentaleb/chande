@@ -11,8 +11,7 @@
   "main": "dist/app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node dist/app.js",
-    "test": "jest"
+    "start": "tsc && node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -23,10 +22,6 @@
   },
   "bin": {
     "chande": "./dist/app.js"
-  },
-  "jest": {
-    "coverageDirectory": "coverage",
-    "testEnvironment": "node"
   },
   "keywords": [
     "currency",
@@ -40,15 +35,14 @@
   "author": "Mohsen Taleb",
   "license": "MIT",
   "dependencies": {
+    "@types/commander": "^2.12.2",
     "@types/puppeteer": "^2.0.1",
     "ascii-table": "0.0.9",
-    "minimist": "^1.2.5",
+    "commander": "^5.0.0",
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.0",
     "@types/node": "^12.7.4",
-    "jest": "^24.9.0",
     "tslint": "^6.1.1",
     "typescript": "^3.8.3"
   }

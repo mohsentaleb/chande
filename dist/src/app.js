@@ -8,11 +8,9 @@ const puppeteer_1 = __importDefault(require("puppeteer"));
 // @ts-ignore
 const ascii_table_1 = __importDefault(require("ascii-table"));
 const commander_1 = require("commander");
-const package_json_1 = require("./package.json");
-commander_1.program
-    .version(package_json_1.version)
-    .option("-p, --proxy <scheme://host:port>", "use a proxy for the request. e.g. socks5://127.0.0.1:1080")
-    .parse(process.argv);
+const package_json_1 = require("../package.json");
+commander_1.program.version(package_json_1.version);
+//const argv = minimist(process.argv.slice(2));
 const URL = "https://bonbast.com";
 const getValueBySelector = async (page, selector) => {
     const el = await page.$(selector);
@@ -23,12 +21,12 @@ const getValueBySelector = async (page, selector) => {
 const thousandsSeparator = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
-(async () => {
+commander_1.program.parse(process.argv);
+if (!commander_1.program.args.length)
+    commander_1.program.help();
+async () => {
     const browser = await puppeteer_1.default.launch({
         headless: true,
-        args: commander_1.program.proxy
-            ? ["--proxy-server=" + commander_1.program.proxy]
-            : ["--proxy-auto-detect"],
     });
     const page = await browser.newPage();
     try {
@@ -60,7 +58,7 @@ const thousandsSeparator = (x) => {
                 buy: await getValueBySelector(page, "#gbp2"),
             },
         };
-        const userCurrencyArgs = commander_1.program.args;
+        const userCurrencyArgs = [];
         let supportedCurrencies = Object.keys(currencyValues);
         if (userCurrencyArgs.length > 0) {
             // user needs only specifc currencies
@@ -95,4 +93,7 @@ const thousandsSeparator = (x) => {
         console.log("Can not connect to bonbast.com. If you are in Iran, you may use a proxy. Example:\nchande --proxy socks5://127.0.0.1:1080 ");
         await browser.close();
     }
-})();
+    finally {
+        process.exit(1);
+    }
+};

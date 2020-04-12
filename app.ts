@@ -2,7 +2,16 @@
 import puppeteer, { Page } from "puppeteer";
 // @ts-ignore
 import AsciiTable from "ascii-table";
-import minimist from "minimist";
+import { program } from "commander";
+import { version } from "./package.json";
+
+program
+  .version(version)
+  .option(
+    "-p, --proxy <scheme://host:port>",
+    "use a proxy for the request. e.g. socks5://127.0.0.1:1080"
+  )
+  .parse(process.argv);
 
 type TableRow = [number, string, string, string, string];
 
@@ -22,8 +31,6 @@ interface TableJSON {
   rows: TableRow[];
 }
 
-const argv = minimist(process.argv.slice(2));
-
 const URL = "https://bonbast.com";
 
 const getValueBySelector = async (page: Page, selector: string) => {
@@ -40,8 +47,8 @@ const thousandsSeparator = (x: string) => {
 (async () => {
   const browser = await puppeteer.launch({
     headless: true,
-    args: argv.proxy
-      ? ["--proxy-server=" + argv.proxy]
+    args: program.proxy
+      ? ["--proxy-server=" + program.proxy]
       : ["--proxy-auto-detect"],
   });
   const page: Page = await browser.newPage();
@@ -76,7 +83,7 @@ const thousandsSeparator = (x: string) => {
       },
     };
 
-    const userCurrencyArgs = argv._;
+    const userCurrencyArgs: string[] = program.args;
     let supportedCurrencies: string[] = Object.keys(currencyValues);
 
     if (userCurrencyArgs.length > 0) {
@@ -125,7 +132,5 @@ const thousandsSeparator = (x: string) => {
     );
 
     await browser.close();
-  } finally {
-    process.exit(1);
   }
 })();
